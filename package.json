@@ -1,0 +1,17 @@
+{
+  "name": "twitteranarchist",
+  "version": "1.0.0",
+  "description": "",
+  "main": "twitterAnarchist.js",
+  "scripts": {
+    "start": "node twitterAnarchist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.2",
+    "socket.io": "^1.7.3",
+    "twit": "^2.2.5"
+  }
+}
