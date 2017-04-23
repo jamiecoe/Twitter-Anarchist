@@ -1,7 +1,7 @@
 console.log('The Twitter Anarchist is starting on port 3000');
 
 var Twit = require('twit');
-// Remember to add config.js to git.ignore
+
 var config = require('./config');
 var T = new Twit(config);
 

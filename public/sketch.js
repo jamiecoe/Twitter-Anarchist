@@ -6,6 +6,7 @@ function setup() {
 
     var twitterUser = '';
     var htmlTweets = [];
+    var htmlManifestoParagraph;
 
     var nouns = [];
     var verbs = [];
@@ -14,29 +15,28 @@ function setup() {
 
     var lexicon = new RiLexicon();
     var rGrammar = new RiGrammar();
-    rGrammar.addRule('<start>', '<AJ> <N> <V> <AV>');
+    rGrammar.addRule('<start>', 'The <AJ> <N> <V> <AV>. ');
 
     var tweetHeader = select('#tweetsHeader');
 
-    var button = select('#manifestoButton');
+    //var button = select('#manifestoButton');
 
-    button.mousePressed(function() {
-        if (rGrammar.hasRule('<N>'))
-            console.log(rGrammar.expand());
-        }
-    );
 
-    // When text entered into seachBar
-    searchBar.changed(function() {
-        console.log('you are typing: ', this.value());
-        twitterUser = this.value();
-        tweetHeader.html(`Tweets from: @${twitterUser}`);
+    var searchForTwitterUser = function() {
+      console.log('you are typing: ', searchBar.value());
+      twitterUser = searchBar.value();
+      tweetHeader.html(`Tweets from: @${twitterUser}`);
 
-        var data = {
-            searchTerm: this.value()
-        };
-        socket.emit('SearchTerm', data);
-    })
+      var data = {
+          searchTerm: searchBar.value()
+      };
+      socket.emit('SearchTerm', data);
+    };
+
+    //button.mousePressed(searchForTwitterUser);
+    searchBar.changed(searchForTwitterUser);
+
+
 
     socket.on('noUser', function(errorMessage) {
         console.log(errorMessage);
@@ -62,6 +62,8 @@ function setup() {
             // Need to do this as well for some reason to clear old tweets
             htmlTweets = [];
 
+            htmlManifestoParagraph.remove();
+
             nouns = [];
             verbs = [];
             adverbs = [];
@@ -77,8 +79,6 @@ function setup() {
             htmlTweets.push(createElement('li', tweet));
         });
 
-        console.log(htmlTweets);
-
         htmlTweets.forEach(function(htmlTweet) {
             htmlTweet.parent('#tweets');
         });
@@ -91,16 +91,22 @@ function setup() {
         rsTweets.forEach(function(rsTweet) {
             // console.log(rsTweet);
             rsTweet.words().forEach(function(word) {
-                if (lexicon.isNoun(word))
-                    nouns.push(word);
-                if (lexicon.isVerb(word))
-                    verbs.push(word);
-                if (lexicon.isAdjective(word))
-                    adjectives.push(word);
-                if (lexicon.isAdverb(word))
-                    adverbs.push(word);
+                if (lexicon.isNoun(word)) {
+                    nouns.push(word.toLowerCase());
                 }
-            );
+                if (lexicon.isVerb(word)) {
+                    verbs.push(word.toLowerCase());
+                }
+
+                if (lexicon.isAdjective(word)) {
+                    adjectives.push(word.toLowerCase());
+                }
+
+                if (lexicon.isAdverb(word)) {
+                    adverbs.push(word.toLowerCase());
+                }
+
+            });
         });
 
         // console.log('List of nouns:', nouns);
@@ -123,6 +129,21 @@ function setup() {
         adverbs.forEach(function(adverb) {
             rGrammar.addRule('<AV>', adverb)
         });
+
+
+
+
+
+        if (rGrammar.hasRule('<N>')) {
+          var manifestoParagraph = '';
+
+          for (var i = 0; i < 10; i++) {
+              manifestoParagraph += rGrammar.expand();
+          }
+
+          htmlManifestoParagraph = createP(manifestoParagraph);
+          htmlManifestoParagraph.parent('#manifesto');
+        }
 
     });
 

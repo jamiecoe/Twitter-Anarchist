@@ -33,21 +33,25 @@
 
     <div class="container">
         <div class="row">
-            <!-- <form class="form-inline"> -->
-            <div class="form-group col-md-6 col-md-offset-3">
+          <div class="col-md-6 col-md-offset-3" style="margin-top: 50px;">
+            <!-- <form class="form-inline" style="margin-top: 50px;"> -->
+            <div class="form-group">
                 <div class="input-group">
                     <div class="input-group-addon">@</div>
                     <input type="text" id="twitterSearch" class="form-control form-group-lg" placeholder="Enter twitter handle, eg: realDonaldTrump">
                 </div>
+                <!-- <button id="manifestoButton" class="btn btn-primary">Create Manifesto</button> -->
             </div>
             <!-- </form> -->
+          </div>
         </div>
         <div class="row">
             <h1 id="tweetsHeader">Tweets from:</h1>
             <ul id="tweets"></ul>
         </div>
-        <div class="row">
-          <button id="manifestoButton" class="btn btn-primary">Create Manifesto</button>
+        <div class="row" id="manifesto">
+           <h1>Manifesto:</h1>
+
         </div>
     </div>
 
